@@ -10,4 +10,4 @@ COPY --from=0 /go/src/github.com/kubernetes-csi/livenessprobe/livenessprobe /usr
 RUN useradd livenessprobe
 USER livenessprobe
 
-CMD ["/usr/bin/livenessprobe"]
+ENTRYPOINT ["/usr/bin/livenessprobe"]
