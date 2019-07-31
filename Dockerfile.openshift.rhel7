@@ -5,6 +5,4 @@ RUN make build
 
 FROM registry.svc.ci.openshift.org/ocp/4.0:base
 COPY --from=builder /go/src/github.com/kubernetes-csi/livenessprobe/bin/livenessprobe /usr/bin/
-RUN useradd livenessprobe
-USER livenessprobe
 ENTRYPOINT ["/usr/bin/livenessprobe"]
