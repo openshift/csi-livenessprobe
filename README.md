@@ -54,9 +54,6 @@ spec:
  # The liveness probe sidecar container
  - name: liveness-probe
     imagePullPolicy: Always
-    volumeMounts:
-    - mountPath: /csi
-      name: socket-dir
     image: quay.io/k8scsi/livenessprobe:v1.1.0
     args:
     - --csi-address=/csi/csi.sock
@@ -79,10 +76,6 @@ spec:
 * `--probe-timeout <duration>`: Maximum duration of single `Probe()` call (default "1s").
 
 * All glog / klog arguments are supported, such as `-v <log level>` or `-alsologtostderr`.
-
-#### Deprecated arguments
-
-* `--connection-timeout <duration>`: This option was used to limit establishing connection to CSI driver. Currently, the option does not have any effect and the external-provisioner tries to connect to CSI driver socket indefinitely. It is recommended to run ReadinessProbe on the driver to ensure that the driver comes up in reasonable time.
 
 ## Community, discussion, contribution, and support
 

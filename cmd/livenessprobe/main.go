@@ -26,7 +26,6 @@ import (
 	"k8s.io/klog"
 
 	connlib "github.com/kubernetes-csi/csi-lib-utils/connection"
-	"github.com/kubernetes-csi/csi-lib-utils/deprecatedflags"
 	"github.com/kubernetes-csi/csi-lib-utils/rpc"
 
 	"google.golang.org/grpc"
@@ -37,8 +36,6 @@ var (
 	probeTimeout = flag.Duration("probe-timeout", time.Second, "Probe timeout in seconds")
 	csiAddress   = flag.String("csi-address", "/run/csi/socket", "Address of the CSI driver socket.")
 	healthzPort  = flag.String("health-port", "9808", "TCP ports for listening healthz requests")
-
-	_ = deprecatedflags.Add("connection-timeout")
 )
 
 type healthProbe struct {
@@ -50,7 +47,7 @@ func (h *healthProbe) checkProbe(w http.ResponseWriter, req *http.Request) {
 	ctx, cancel := context.WithTimeout(req.Context(), *probeTimeout)
 	defer cancel()
 
-	klog.Infof("Sending probe request to CSI driver %q", h.driverName)
+	klog.V(5).Infof("Sending probe request to CSI driver %q", h.driverName)
 	ready, err := rpc.Probe(ctx, h.conn)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
@@ -61,14 +58,14 @@ func (h *healthProbe) checkProbe(w http.ResponseWriter, req *http.Request) {
 
 	if !ready {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		w.Write([]byte("driver responded but is not ready"))
 		klog.Error("driver responded but is not ready")
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(`ok`))
-	klog.Infof("Health check succeeded")
+	klog.V(5).Infof("Health check succeeded")
 }
 
 func main() {
