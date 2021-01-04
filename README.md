@@ -11,14 +11,14 @@ See CSI spec for more information about Probe API call.
 ## Compatibility
 This information reflects the head of this branch.
 
-| Compatible with CSI Version                                                                | Container Image              | Min K8s Version |
-| ------------------------------------------------------------------------------------------ | -----------------------------| --------------- |
-| [CSI Spec v1.0.0](https://github.com/container-storage-interface/spec/releases/tag/v1.0.0) | quay.io/k8scsi/livenessprobe | 1.13            |
+| Compatible with CSI Version                                                                | Container Image                      | [Min K8s Version](https://kubernetes-csi.github.io/docs/kubernetes-compatibility.html#minimum-version) |
+| ------------------------------------------------------------------------------------------ | -------------------------------------| --------------- |
+| [CSI Spec v1.0.0](https://github.com/container-storage-interface/spec/releases/tag/v1.0.0) | k8s.gcr.io/sig-storage/livenessprobe | 1.13            |
 
 
 ## Usage
 
-See [hostpath-with-livenessprobe.yaml](deployment/kubernetes/hostpath-with-livenessprobe.yaml)
+See [hostpath-with-livenessprobe.yaml](https://github.com/kubernetes-csi/livenessprobe/blob/master/deployment/kubernetes/livenessprobe-sidecar.yaml)
 for example how to use the liveness probe with a CSI driver. Notice that actual
 `livenessProbe` is set on the container with the CSI driver. This way, Kubernetes
 restarts the CSI driver container when the probe fails. The liveness probe
@@ -74,6 +74,10 @@ spec:
 * `--health-port <number>`: TCP ports for listening for HTTP requests (default "9808")
 
 * `--probe-timeout <duration>`: Maximum duration of single `Probe()` call (default "1s").
+
+* `--metrics-address <port>`: The TCP network address where the prometheus metrics endpoint will listen (example: `:8080`). The default is empty string, which means metrics endpoint is disabled.
+
+* `--metrics-path <path>`: The HTTP path where prometheus metrics will be exposed. Default is `/metrics`."
 
 * All glog / klog arguments are supported, such as `-v <log level>` or `-alsologtostderr`.
 

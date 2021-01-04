@@ -1,0 +1,12 @@
+ARG BASE_IMAGE=servercore
+ARG BASE_IMAGE_TAG=1809
+ARG REGISTRY=mcr.microsoft.com/windows
+
+FROM ${REGISTRY}/${BASE_IMAGE}:${BASE_IMAGE_TAG} as core
+FROM mcr.microsoft.com/windows/nanoserver:${BASE_IMAGE_TAG}
+LABEL description="CSI Liveness Probe"
+
+COPY ./bin/livenessprobe.exe /livenessprobe.exe
+COPY --from=core /Windows/System32/netapi32.dll /Windows/System32/netapi32.dll
+USER ContainerAdministrator
+ENTRYPOINT ["/livenessprobe.exe"]
