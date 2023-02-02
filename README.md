@@ -13,7 +13,7 @@ This information reflects the head of this branch.
 
 | Compatible with CSI Version                                                                | Container Image                      | [Min K8s Version](https://kubernetes-csi.github.io/docs/kubernetes-compatibility.html#minimum-version) |
 | ------------------------------------------------------------------------------------------ | -------------------------------------| --------------- |
-| [CSI Spec v1.0.0](https://github.com/container-storage-interface/spec/releases/tag/v1.0.0) | k8s.gcr.io/sig-storage/livenessprobe | 1.13            |
+| [CSI Spec v1.0.0](https://github.com/container-storage-interface/spec/releases/tag/v1.0.0) | registry.k8s.io/sig-storage/livenessprobe | 1.13            |
 
 
 ## Usage
@@ -50,11 +50,11 @@ spec:
     volumeMounts:
     - mountPath: /csi
       name: socket-dir
-    # ...
- # The liveness probe sidecar container
- - name: liveness-probe
+  # ...
+  # The liveness probe sidecar container
+  - name: liveness-probe
     imagePullPolicy: Always
-    image: quay.io/k8scsi/livenessprobe:v1.1.0
+    image: registry.k8s.io/sig-storage/livenessprobe:v2.7.0
     args:
     - --csi-address=/csi/csi.sock
     volumeMounts:
@@ -71,13 +71,15 @@ spec:
 
 #### Other recognized arguments
 
-* `--health-port <number>`: TCP ports for listening for HTTP requests (default "9808")
+* `--health-port <number>`: TCP ports for listening for healthz requests (default "9808")
 
 * `--probe-timeout <duration>`: Maximum duration of single `Probe()` call (default "1s").
 
 * `--metrics-address <port>`: The TCP network address where the prometheus metrics endpoint will listen (example: `:8080`). The default is empty string, which means metrics endpoint is disabled.
 
 * `--metrics-path <path>`: The HTTP path where prometheus metrics will be exposed. Default is `/metrics`."
+
+* `--http-endpoint <endpoint>`: The TCP network address where the HTTP server for diagnostics, including CSI driver health check and metrics. The default is empty string, which means the server is disabled.
 
 * All glog / klog arguments are supported, such as `-v <log level>` or `-alsologtostderr`.
 
