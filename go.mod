@@ -1,6 +1,6 @@
 module github.com/kubernetes-csi/livenessprobe
 
-go 1.22
+go 1.22.0
 
 require (
 	github.com/container-storage-interface/spec v1.9.0
