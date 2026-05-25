@@ -16,5 +16,6 @@ CMDS=livenessprobe
 all: build
 
 include release-tools/build.make
+LDFLAGS = -s -w
 
 test: test-logcheck
