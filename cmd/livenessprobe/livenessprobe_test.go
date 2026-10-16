@@ -26,9 +26,9 @@ import (
 	"testing"
 
 	csi "github.com/container-storage-interface/spec/lib/go/csi"
-	"github.com/golang/mock/gomock"
 	"github.com/kubernetes-csi/csi-lib-utils/metrics"
 	"github.com/kubernetes-csi/csi-test/v5/driver"
+	"go.uber.org/mock/gomock"
 )
 
 const (
